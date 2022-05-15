@@ -29,10 +29,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.1
+  flutter_svg: ^1.0.3
   provider: ^4.3.1
-
-
+  flutter_native_splash: ^2.1.2+1
+  api_cache_manager: ^1.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -59,10 +59,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-    # To add assets to your application, add an assets section, like this:
-    assets:
-      - assets/icons
-      - assets/images
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/
+    - assets/images/
+    - assets/images/logo/
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -75,13 +76,13 @@ flutter:
     # "family" key with the font family name, and a "fonts" key with a
     # list giving the asset and other descriptors for the font. For
     # example:
-    fonts:
-      - family: Lato
-        fonts:
-          - asset: assets/fonts/lato/Lato-Bold.ttf
-          - asset: assets/fonts/lato/Lato-Italic.ttf
-          - asset: assets/fonts/lato/Lato-Regular.ttf
-          - asset: assets/fonts/lato/Lato-Light.ttf
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/lato/Lato-Bold.ttf
+        - asset: assets/fonts/lato/Lato-Italic.ttf
+        - asset: assets/fonts/lato/Lato-Regular.ttf
+        - asset: assets/fonts/lato/Lato-Light.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
@@ -90,3 +91,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  image: assets/images/splash/flutter_ui_dev_logo.png
+  color: "#f9f9f9"
