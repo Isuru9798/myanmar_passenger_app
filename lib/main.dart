@@ -1,9 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:myanmar_passenger_app/constants.dart';
+import './constants.dart';
+import './routes.dart';
+import './screens/splash_screen.dart';
+
 import 'package:myanmar_passenger_app/screens/auth/login_screen_back.dart';
-import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
+import './screens/auth/login_screen.dart';
 import 'package:myanmar_passenger_app/screens/auth/login_screen_old.dart';
 
 void main() {
@@ -27,8 +28,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       // home: LoginScreenBack(),
-      home: LoginScreen(),
+      // home: LoginScreen(),
       // home: LoginScreenOld(),
+      initialRoute: SplashScreen.routeName,
+      routes: routes,
+
     );
   }
 }
