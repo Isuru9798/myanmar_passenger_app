@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:adobe_xd/pinned.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:adobe_xd/page_link.dart';
-import 'package:myanmar_passenger_app/components/button_component.dart';
-import 'package:myanmar_passenger_app/constants.dart';
-import 'dart:developer';
+import '../../components/button_component.dart';
+import '../../constants.dart';
+import '../splash_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  static String routeName = '/login';
+
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  final _formKey = GlobalKey<FormState>();
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -58,49 +64,67 @@ class LoginScreen extends StatelessWidget {
                           softWrap: false,
                         ),
                         SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter your email',
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  hintText: 'Enter your email',
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter your email address";
+                                  }
+                                  if (!RegExp(r'\S+@\S+\.\S+')
+                                      .hasMatch(value)) {
+                                    return "Please enter a valid email address";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 20.0),
+                              TextFormField(
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  hintText: 'Enter your Password',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'This field is required';
+                                  }
+                                  if (value.trim().length < 8) {
+                                    return 'Password must be at least 8 characters in length';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 5.0),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  'Forget Password',
+                                ),
+                              ),
+                              SizedBox(height: 30.0),
+                              ButtonComponent(
+                                  text: 'Login',
+                                  func: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('Processing Data')),
+                                      );
+                                    }
+                                  }),
+                            ],
                           ),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
                         ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter your Password',
-                          ),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 5.0),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text('Forget Password',),
-                        ),
-                        SizedBox(height: 30.0),
-                        ButtonComponent(
-                            text: 'Login',
-                            func: () {
-                              log('asa');
-                            }),
                         SizedBox(height: 30.0),
                         Text('Don\'t have an account, sign up '),
-                        TextSpan(
-                            text: 'Terms of Service',
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                print('Terms of Service"');
-                              }),
+                        SizedBox(height: 30.0)
                       ],
                     ),
                   ),
@@ -115,7 +139,8 @@ class LoginScreen extends StatelessWidget {
                 title: Text(''),
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios, color: backgroundColor),
-                  onPressed: () => () {},
+                  onPressed: () =>
+                      {Navigator.of(context).pushNamed(SplashScreen.routeName)},
                 ),
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
