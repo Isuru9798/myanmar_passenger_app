@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:myanmar_passenger_app/constants.dart';
+import 'package:myanmar_passenger_app/screens/auth/login_screen_back.dart';
 import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
+import 'package:myanmar_passenger_app/screens/auth/login_screen_old.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +26,9 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(color: textColor)),
         primarySwatch: Colors.blue,
       ),
+      // home: LoginScreenBack(),
       home: LoginScreen(),
+      // home: LoginScreenOld(),
     );
   }
 }
