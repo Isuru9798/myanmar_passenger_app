@@ -1,100 +1,127 @@
 import 'package:flutter/material.dart';
+import 'package:adobe_xd/pinned.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:adobe_xd/page_link.dart';
+import 'package:myanmar_passenger_app/components/button_component.dart';
 import 'package:myanmar_passenger_app/constants.dart';
+import 'dart:developer';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  bool isApiCallProcess = false;
-  bool hidePassword = true;
-  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  String? loginEmail;
-  String? loginPassword;
-
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Form(
-              key: globalFormKey,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 70),
-                  Image(
-                    alignment: Alignment.center,
-                    height: 100.0,
-                    width: 100.0,
-                    image: AssetImage("assets/images/logo/logo.jpg"),
+                  Container(
+                    height: 280.0,
+                    decoration: BoxDecoration(
+                      color: primaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(50.0),
+                        bottomLeft: Radius.circular(50.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: boxShadowColor1,
+                          offset: Offset(0, 15),
+                          blurRadius: 30,
+                        ),
+                      ],
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 79.0,
+                        child: Image.asset("assets/images/logo.png"),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 40),
-                  Text(
-                    'Passenger Login',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(20.0),
+                  SizedBox(
+                    width: 300.0,
                     child: Column(
                       children: [
-                        TextField(
-                          // controller: loginEmail,
-                          keyboardType: TextInputType.emailAddress,
+                        SizedBox(height: 40.0),
+                        Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: textColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                          softWrap: false,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Email Address',
-                            labelStyle: TextStyle(fontSize: 14),
-                            hintStyle:
-                                TextStyle(color: textColor, fontSize: 10.0),
+                            hintText: 'Enter your email',
                           ),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
                         ),
-                        SizedBox(height: 10),
-                        TextField(
-                          obscureText: true,
+                        SizedBox(height: 20.0),
+                        TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Password',
-                            labelStyle: TextStyle(fontSize: 14),
-                            hintStyle:
-                                TextStyle(color: textColor, fontSize: 10.0),
+                            hintText: 'Enter your Password',
                           ),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
                         ),
-                        SizedBox(height: 40),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: Container(
-                            height: 50,
-                            child: Center(
-                              child: Text('Login',
-                                  style: TextStyle(fontSize: 18.0)),
-                            ),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                // side: BorderSide(color: Colors.red),
-                              ),
-                            ),
-                          ),
+                        SizedBox(height: 5.0),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text('Forget Password',),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30.0),
+                        ButtonComponent(
+                            text: 'Login',
+                            func: () {
+                              log('asa');
+                            }),
+                        SizedBox(height: 30.0),
                         Text('Don\'t have an account, sign up '),
+                        TextSpan(
+                            text: 'Terms of Service',
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                print('Terms of Service"');
+                              }),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
+            Positioned(
+              top: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: AppBar(
+                title: Text(''),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios, color: backgroundColor),
+                  onPressed: () => () {},
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+              ),
+            ),
+          ],
         ),
       ),
     );
