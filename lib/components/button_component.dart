@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:myanmar_passenger_app/constants.dart';
 
 class ButtonComponent extends StatelessWidget {
-  const ButtonComponent({Key? key, required this.text, required this.func})
+  const ButtonComponent({Key? key, required this.text, required this.func, required this.colorCode})
       : super(key: key);
   final String text;
+  final Color colorCode;
   final Function() func;
 
   @override
@@ -18,7 +19,7 @@ class ButtonComponent extends StatelessWidget {
         ),
       ),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(primaryColor),
+        backgroundColor: MaterialStateProperty.all(colorCode),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.only(

@@ -1,31 +1,34 @@
-import 'package:flutter/material.dart';
-import '../../components/button_component.dart';
-import '../../constants.dart';
-import '../splash_screen.dart';
-import '../../size_config.dart';
+import 'dart:math';
 
-class LoginScreen extends StatefulWidget {
-  static String routeName = '/login';
+import 'package:flutter/material.dart';
+import 'package:myanmar_passenger_app/components/button_component.dart';
+import 'package:myanmar_passenger_app/constants.dart';
+import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
+import 'package:myanmar_passenger_app/screens/splash_screen.dart';
+import 'package:myanmar_passenger_app/size_config.dart';
+
+class RegisterScreen extends StatefulWidget {
+  static String routeName = 'register';
+
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-
-  init() {}
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   @override
   final _formKey = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     height: getProportionateScreenHeight(280.0),
@@ -58,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         SizedBox(height: getProportionateScreenHeight(40.0)),
                         Text(
-                          'Login',
+                          'Register',
                           style: TextStyle(
                             fontSize: 20,
                             color: textColor,
@@ -119,12 +122,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   colorCode: primaryColor,
                                   text: 'Login',
                                   func: () {
+
                                     if (_formKey.currentState!.validate()) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
                                             content: Text('Processing Data')),
                                       );
+                                      Navigator.of(context)
+                                          .pushNamed(SplashScreen.routeName);
                                     }
                                   }),
                             ],
