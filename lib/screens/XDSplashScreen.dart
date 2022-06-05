@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
+
 // import './XDLogin.dart';
 import 'package:adobe_xd/page_link.dart';
+
 // import './XDRegister.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
 
 class XDSplashScreen extends StatelessWidget {
   XDSplashScreen({
     Key? key,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,11 +64,7 @@ class XDSplashScreen extends StatelessWidget {
           Pinned.fromPins(
             Pin(size: 526.7, end: -263.3),
             Pin(size: 351.1, middle: 0.6016),
-            child: SvgPicture.string(
-              _svg_sy3lk3,
-              allowDrawingOutsideViewBox: true,
-              fit: BoxFit.fill,
-            ),
+            child: Image.asset("assets/images/car_1.png"),
           ),
           Align(
             alignment: Alignment(-0.002, -0.58),
@@ -210,12 +210,20 @@ class XDSplashScreen extends StatelessWidget {
             Pin(size: 45.0, end: 95.0),
             child: PageLink(
               links: [
-                // PageLinkInfo(
-                //   transition: LinkTransition.Fade,
-                //   ease: Curves.easeOut,
-                //   duration: 0.3,
-                //   pageBuilder: () => XDLogin(),
-                // ),
+                PageLinkInfo(
+                  transition: LinkTransition.Fade,
+                  ease: Curves.easeOut,
+                  duration: 0.3,
+                  pageBuilder: () => {
+                    {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) {
+                          return LoginScreen();
+                        }),
+                      )
+                    },
+                  },
+                ),
               ],
               child: Stack(
                 children: <Widget>[
