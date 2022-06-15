@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:myanmar_passenger_app/screens/XDSplashScreen.dart';
 import './constants.dart';
 import 'routes/routes.dart';
 import './screens/splash_screen.dart';
-
-import 'package:myanmar_passenger_app/screens/auth/login_screen_back.dart';
-import './screens/auth/login_screen.dart';
-import 'package:myanmar_passenger_app/screens/auth/login_screen_old.dart';
 
 void main() {
   runApp(const MyApp());
