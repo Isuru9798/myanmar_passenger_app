@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myanmar_passenger_app/screens/home/home_screen.dart';
+
 import '../../components/button_component.dart';
 import '../../constants.dart';
 import '../splash_screen.dart';
@@ -124,6 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                           .showSnackBar(
                                         const SnackBar(
                                             content: Text('Processing Data')),
+                                      );
+
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        HomeScreen.routeName,
+                                        (Route<dynamic> route) => false,
                                       );
                                     }
                                   }),

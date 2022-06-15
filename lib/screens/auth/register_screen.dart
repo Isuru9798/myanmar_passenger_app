@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:myanmar_passenger_app/components/button_component.dart';
-import 'package:myanmar_passenger_app/constants.dart';
-import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
-import 'package:myanmar_passenger_app/screens/splash_screen.dart';
-import 'package:myanmar_passenger_app/size_config.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import '../../components/button_component.dart';
+import '../../../constants.dart';
+import './otp_screen.dart';
+import '../splash_screen.dart';
+import '../../size_config.dart';
 
 class RegisterScreen extends StatefulWidget {
   static String routeName = 'register';
@@ -19,6 +18,14 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   final _formKey = GlobalKey<FormState>();
+
+  String _email = '', _password = '', _mobile = '', _dcode = '';
+
+  TextEditingController passController = TextEditingController();
+  TextEditingController confirmPassController = TextEditingController();
+
+  String initialCountry = 'LK';
+  PhoneNumber number = PhoneNumber(isoCode: 'LK');
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -78,6 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               TextFormField(
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
+                                  labelText: 'Email',
                                   hintText: 'Enter your email',
                                 ),
                                 validator: (String? value) {
@@ -90,12 +98,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   }
                                   return null;
                                 },
+                                onSaved: (value) {
+                                  _email = value!.trim();
+                                },
                               ),
                               SizedBox(
-                                  height: getProportionateScreenHeight(20.0)),
+                                  height: getProportionateScreenHeight(10.0)),
+                              InternationalPhoneNumberInput(
+                                hintText: 'Enter Your Mobile Number',
+                                onInputChanged: (PhoneNumber number) {},
+                                onInputValidated: (bool value) {},
+                                onSaved: (PhoneNumber number) {
+                                  _dcode = number.dialCode!;
+                                  _mobile = number.parseNumber();
+                                },
+                                selectorConfig: SelectorConfig(
+                                  selectorType:
+                                      PhoneInputSelectorType.BOTTOM_SHEET,
+                                ),
+                                ignoreBlank: false,
+                                autoValidateMode: AutovalidateMode.disabled,
+                                selectorTextStyle:
+                                    TextStyle(color: Colors.black),
+                                initialValue: number,
+                                formatInput: false,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    signed: true, decimal: true),
+                                // inputBorder: OutlineInputBorder(),
+                                inputDecoration: InputDecoration(
+                                  label: Text('Phone Number'),
+                                ),
+                              ),
+                              SizedBox(
+                                  height: getProportionateScreenHeight(10.0)),
                               TextFormField(
                                 obscureText: true,
+                                autocorrect: false,
+                                controller: passController,
+                                textCapitalization: TextCapitalization.none,
                                 decoration: InputDecoration(
+                                  labelText: 'Password',
                                   hintText: 'Enter your Password',
                                 ),
                                 validator: (value) {
@@ -109,36 +151,67 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               SizedBox(
+                                  height: getProportionateScreenHeight(10.0)),
+                              TextFormField(
+                                obscureText: true,
+                                autocorrect: false,
+                                controller: confirmPassController,
+                                textCapitalization: TextCapitalization.none,
+                                decoration: InputDecoration(
+                                  labelText: 'Confirm Password',
+                                  hintText: 'Re Enter your Password',
+                                ),
+                                validator: (value) {
+                                  if (confirmPassController.text == null ||
+                                      confirmPassController.text
+                                          .trim()
+                                          .isEmpty) {
+                                    return 'This field is required';
+                                  }
+                                  if (passController.text.trim() !=
+                                      confirmPassController.text.trim()) {
+                                    return 'Confirm Password does not match';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _password = passController.text.trim();
+                                },
+                              ),
+                              SizedBox(
                                   height: getProportionateScreenHeight(5.0)),
                               Align(
                                 alignment: Alignment.centerRight,
-                                child: Text(
-                                  'Forget Password',
-                                ),
+                                child: Text('Forget Password'),
                               ),
                               SizedBox(
                                   height: getProportionateScreenHeight(50.0)),
                               ButtonComponent(
-                                  colorCode: primaryColor,
-                                  text: 'Login',
-                                  func: () {
+                                colorCode: primaryColor,
+                                text: 'Login',
+                                func: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    print('email: ' + _email);
+                                    print('dial code: ' + _dcode);
+                                    print('mobile: ' + _mobile);
+                                    print('password: ' + _password.trim());
 
-                                    if (_formKey.currentState!.validate()) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('Processing Data')),
-                                      );
-                                      Navigator.of(context)
-                                          .pushNamed(SplashScreen.routeName);
-                                    }
-                                  }),
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Processing Data')),
+                                    );
+                                  }
+                                  Navigator.of(context)
+                                      .pushNamed(OtpScreen.routeName);
+                                },
+                              ),
                             ],
                           ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(30.0)),
                         Text('Don\'t have an account, sign up '),
-                        SizedBox(height: getProportionateScreenHeight(30.0))
+                        SizedBox(height: getProportionateScreenHeight(30.0)),
                       ],
                     ),
                   ),
@@ -151,10 +224,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               right: 0.0,
               child: AppBar(
                 title: Text(''),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: backgroundColor),
-                  onPressed: () =>
-                      {Navigator.of(context).pushNamed(SplashScreen.routeName)},
+                leading: Container(
+                  // color: Colors.red,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(11)),
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios, color: backgroundColor),
+                    onPressed: () => {
+                      Navigator.of(context).pushNamed(SplashScreen.routeName)
+                    },
+                  ),
                 ),
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
