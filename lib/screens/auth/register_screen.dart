@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:myanmar_passenger_app/models/login_model/login_model.dart';
+
+import 'package:myanmar_passenger_app/models/user_model/user_address_model.dart';
+
+import 'package:myanmar_passenger_app/models/user_model/user_model.dart';
+import 'package:myanmar_passenger_app/providers/auth_provider.dart';
+import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
+import 'package:myanmar_passenger_app/services/authentication/authentication_service.dart';
+import 'package:provider/provider.dart';
+
 import '../../components/button_component.dart';
 import '../../../constants.dart';
 import './otp_screen.dart';
@@ -18,14 +28,37 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   final _formKey = GlobalKey<FormState>();
+  final AuthenticationService authService = AuthenticationService();
 
-  String _email = '', _password = '', _mobile = '', _dcode = '';
+  UserModel user = UserModel(
+      userAddress: new UserAddressModel(
+        addressLine1: "",
+        addressLine2: "",
+        district: "",
+        city: "",
+      ),
+      id: '',
+      userFirstName: '',
+      userLastName: '',
+      userImage: '',
+      userStatus: true,
+      userStatusString: 'Pending');
+
+  LoginModel login = LoginModel(
+    loginEmail: '',
+    loginPassword: '',
+    loginMobile: '',
+    loginType: 'Passenger',
+  );
+
+  String _dcode = '';
 
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
 
   String initialCountry = 'LK';
   PhoneNumber number = PhoneNumber(isoCode: 'LK');
+  bool isLoading = false;
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -99,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   return null;
                                 },
                                 onSaved: (value) {
-                                  _email = value!.trim();
+                                  login.loginEmail = value!.trim();
                                 },
                               ),
                               SizedBox(
@@ -110,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onInputValidated: (bool value) {},
                                 onSaved: (PhoneNumber number) {
                                   _dcode = number.dialCode!;
-                                  _mobile = number.parseNumber();
+                                  login.loginMobile = number.parseNumber();
                                 },
                                 selectorConfig: SelectorConfig(
                                   selectorType:
@@ -175,7 +208,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   return null;
                                 },
                                 onSaved: (value) {
-                                  _password = passController.text.trim();
+                                  login.loginPassword =
+                                      passController.text.trim();
                                 },
                               ),
                               SizedBox(
@@ -188,29 +222,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   height: getProportionateScreenHeight(50.0)),
                               ButtonComponent(
                                 colorCode: primaryColor,
-                                text: 'Login',
-                                func: () {
+                                text: 'Register',
+                                isLoading: isLoading,
+                                func: () async {
                                   if (_formKey.currentState!.validate()) {
+                                    setState(() => isLoading = true);
                                     _formKey.currentState!.save();
-                                    print('email: ' + _email);
-                                    print('dial code: ' + _dcode);
-                                    print('mobile: ' + _mobile);
-                                    print('password: ' + _password.trim());
-
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('Processing Data')),
+                                    await Provider.of<AuthProvider>(context,
+                                            listen: false)
+                                        .signUpUser(
+                                      context: context,
+                                      user: user,
+                                      login: login,
                                     );
+                                    setState(() => isLoading = false);
+
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   const SnackBar(
+                                    //       content: Text('Processing Data')),
+                                    // );
+
                                   }
-                                  Navigator.of(context)
-                                      .pushNamed(OtpScreen.routeName);
                                 },
                               ),
                             ],
                           ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(30.0)),
-                        Text('Don\'t have an account, sign up '),
+                        Row(
+                          children: [
+                            Text('have an account, '),
+                            GestureDetector(
+                              child: Text(
+                                'sign in',
+                                style: TextStyle(
+                                    color: secondaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  LoginScreen.routeName,
+                                  (route) => false,
+                                );
+                              },
+                            )
+                          ],
+                        ),
                         SizedBox(height: getProportionateScreenHeight(30.0)),
                       ],
                     ),
@@ -236,6 +293,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_ios, color: backgroundColor),
                     onPressed: () => {
+                      FocusScope.of(context).requestFocus(new FocusNode()),
                       Navigator.of(context).pushNamed(SplashScreen.routeName)
                     },
                   ),
@@ -249,4 +307,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+//  signup function API
+//   void SignUpUser({
+//     required UserModel userData,
+//     required LoginModel loginData,
+//   }) {
+//     authService.signUpUser(context: context, user: userData, login: loginData);
+//     // if (code == 200) {
+//     //   Navigator.of(context).pushNamed(OtpScreen.routeName);
+//     // }
+//   }
 }

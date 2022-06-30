@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myanmar_passenger_app/constants.dart';
+import 'package:myanmar_passenger_app/screens/settings/settings_screen.dart';
 import 'package:myanmar_passenger_app/size_config.dart';
 
 class NavBar extends StatelessWidget {
@@ -7,6 +8,7 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return SafeArea(
       child: Drawer(
         child: ListView(
@@ -73,7 +75,9 @@ class NavBar extends StatelessWidget {
               leading: Icon(Icons.person),
               title: Text('Update Profile',
                   style: TextStyle(fontSize: getProportionateScreenWidth(16))),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(SettingsScreen.routeName);
+              },
             ),
           ],
         ),
