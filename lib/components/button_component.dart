@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:myanmar_passenger_app/constants.dart';
 
 class ButtonComponent extends StatelessWidget {
-  const ButtonComponent({Key? key, required this.text, required this.func, required this.colorCode})
-      : super(key: key);
+  const ButtonComponent({
+    Key? key,
+    required this.text,
+    required this.func,
+    required this.colorCode,
+    this.isLoading = false,
+  }) : super(key: key);
   final String text;
   final Color colorCode;
   final Function() func;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,16 @@ class ButtonComponent extends StatelessWidget {
       child: Container(
         height: 50,
         child: Center(
-          child: Text(text, style: TextStyle(fontSize: 18.0)),
+          child: isLoading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(color: primaryLightColor),
+                    const SizedBox(width: 24),
+                    Text("Please Wait", style: TextStyle(fontSize: 18.0)),
+                  ],
+                )
+              : Text(text, style: TextStyle(fontSize: 18.0)),
         ),
       ),
       style: ButtonStyle(

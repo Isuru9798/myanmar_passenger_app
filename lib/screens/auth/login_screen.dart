@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:myanmar_passenger_app/providers/auth_provider.dart';
+import 'package:myanmar_passenger_app/screens/auth/register_screen.dart';
+
 import 'package:myanmar_passenger_app/screens/home/home_screen.dart';
+import 'package:myanmar_passenger_app/services/authentication/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/button_component.dart';
 import '../../constants.dart';
@@ -18,6 +25,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   final _formKey = GlobalKey<FormState>();
+  final AuthenticationService authService = AuthenticationService();
+
+  String email = "", password = "";
+
+  bool isLoading = false;
+
+  // callback(status) {
+  //   setState(() {
+  //     isLoading = status;
+  //   });
+  // }
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -89,6 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                                   return null;
                                 },
+                                onSaved: (value) {
+                                  email = value!;
+                                },
                               ),
                               SizedBox(
                                   height: getProportionateScreenHeight(20.0)),
@@ -106,6 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                                   return null;
                                 },
+                                onSaved: (value) {
+                                  password = value!.trim();
+                                },
                               ),
                               SizedBox(
                                   height: getProportionateScreenHeight(5.0)),
@@ -118,28 +142,53 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                   height: getProportionateScreenHeight(50.0)),
                               ButtonComponent(
-                                  colorCode: primaryColor,
-                                  text: 'Login',
-                                  func: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('Processing Data')),
-                                      );
+                                colorCode: primaryColor,
+                                text: 'Login',
+                                isLoading: isLoading,
+                                func: () async {
+                                  // callback(isLoading);
 
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                        HomeScreen.routeName,
-                                        (Route<dynamic> route) => false,
-                                      );
-                                    }
-                                  }),
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() => isLoading = true);
+
+                                    _formKey.currentState?.save();
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   const SnackBar(
+                                    //       content: Text('Processing Data')),
+                                    // );
+                                    await Provider.of<AuthProvider>(context,
+                                            listen: false)
+                                        .signInUser(
+                                            context: context,
+                                            email: email,
+                                            password: password);
+                                    setState(() => isLoading = false);
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(30.0)),
-                        Text('Don\'t have an account, sign up '),
+                        Row(
+                          children: [
+                            Text('Don\'t have an account, '),
+                            GestureDetector(
+                              child: Text(
+                                'sign up',
+                                style: TextStyle(
+                                    color: secondaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  RegisterScreen.routeName,
+                                  (route) => false,
+                                );
+                              },
+                            )
+                          ],
+                        ),
                         SizedBox(height: getProportionateScreenHeight(30.0))
                       ],
                     ),
@@ -167,4 +216,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+// void SignInUser() async {
+//   // authService.signInUser(context: context, email: email, password: password);
+//   await}
 }

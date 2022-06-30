@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// import './XDLogin.dart';
-import 'package:adobe_xd/page_link.dart';
-
-// import './XDRegister.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:myanmar_passenger_app/components/button_component.dart';
-import 'package:myanmar_passenger_app/screens/auth/register_screen.dart';
+import '../components/button_component.dart';
+import './auth/register_screen.dart';
 import '../constants.dart';
-import 'package:myanmar_passenger_app/screens/auth/login_screen.dart';
+import './auth/login_screen.dart';
 
 class SplashScreen extends StatelessWidget {
-  static String routeName = '/splash';
+  static String routeName = "/splash";
 
   SplashScreen({Key? key}) : super(key: key);
 
@@ -52,7 +47,7 @@ class SplashScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xffbabdbf),
                   borderRadius:
-                  BorderRadius.all(Radius.elliptical(9999.r, 9999.r)),
+                      BorderRadius.all(Radius.elliptical(9999.r, 9999.r)),
                 ),
               ),
             ),
@@ -63,7 +58,7 @@ class SplashScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xffbfa780),
                   borderRadius:
-                  BorderRadius.all(Radius.elliptical(9999.r, 9999.r)),
+                      BorderRadius.all(Radius.elliptical(9999.r, 9999.r)),
                 ),
               ),
             ),
