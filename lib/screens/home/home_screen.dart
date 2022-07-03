@@ -2,7 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:myanmar_passenger_app/components/nav_bar.dart';
 import 'package:myanmar_passenger_app/constants.dart';
+import 'package:myanmar_passenger_app/main.dart';
 import 'package:myanmar_passenger_app/screens/splash_screen.dart';
+import 'package:myanmar_passenger_app/util/language.dart';
+import 'package:myanmar_passenger_app/util/localization_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,69 +26,105 @@ class _HomeScreenState extends State<HomeScreen> {
     'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
   ];
 
+  void _changeLanguage(Language lang) async {
+    print(lang.languageCode);
+    Locale _temp = await setLocale(lang.languageCode);
+    MyApp.setLocale(context, _temp);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      drawer: NavBar(),
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        elevation: 0.5,
-        // automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: 200.0,
-                width: double.infinity,
-                // color: primaryColor,
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(50.0),
-                    bottomLeft: Radius.circular(50.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: boxShadowColor1,
-                      offset: Offset(0, 15),
-                      blurRadius: 30,
-                    ),
-                  ],
-                ),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    height: 200.0,
-                    viewportFraction: 1.0,
-                    enlargeCenterPage: false,
-                    autoPlay: true,
-                  ),
-                  items: imgList
-                      .map((item) => Container(
-                            child: Center(
-                                child: Image.network(
-                              item,
-                              fit: BoxFit.cover,
-                              height: 200.0,
-                              width: double.infinity,
-                            )),
-                          ))
-                      .toList(),
-                ),
-              ),
-
-              ElevatedButton(
-                onPressed: () async {
-                  final SharedPreferences pref =
-                      await SharedPreferences.getInstance();
-                  pref.clear();
-                  Navigator.pushNamed(context, SplashScreen.routeName);
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        drawer: NavBar(),
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          elevation: 0.5,
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 10.0),
+              child: DropdownButton(
+                onChanged: (Language? lng) {
+                  _changeLanguage(lng!);
                 },
-                child: Text("Logout"),
-              )
-            ],
+                underline: SizedBox(),
+                icon: Icon(
+                  Icons.language,
+                  color: Colors.white,
+                ),
+                items: Language.languageList()
+                    .map<DropdownMenuItem<Language>>(
+                      (lan) => DropdownMenuItem(
+                        value: lan,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(lan.flag),
+                            Text(lan.name),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            )
+          ],
+          // automaticallyImplyLeading: false,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 200.0,
+                  width: double.infinity,
+                  // color: primaryColor,
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(50.0),
+                      bottomLeft: Radius.circular(50.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: boxShadowColor1,
+                        offset: Offset(0, 15),
+                        blurRadius: 30,
+                      ),
+                    ],
+                  ),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 200.0,
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: false,
+                      autoPlay: true,
+                    ),
+                    items: imgList
+                        .map((item) => Container(
+                              child: Center(
+                                  child: Image.network(
+                                item,
+                                fit: BoxFit.cover,
+                                height: 200.0,
+                                width: double.infinity,
+                              )),
+                            ))
+                        .toList(),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final SharedPreferences pref =
+                        await SharedPreferences.getInstance();
+                    await pref.clear();
+                    Navigator.pushNamed(context, SplashScreen.routeName);
+                  },
+                  child: Text("Logout"),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:myanmar_passenger_app/constants.dart';
 import 'package:myanmar_passenger_app/size_config.dart';
 
 class SettingsScreen extends StatefulWidget {
-  static String routeName = 'settings';
+  static String routeName = '/settings';
 
   const SettingsScreen({Key? key}) : super(key: key);
 
