@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:myanmar_passenger_app/screens/home/home_screen.dart';
-import 'package:myanmar_passenger_app/screens/settings/settings_screen.dart';
+import 'package:myanmar_passenger_app/screens/home/settings/language/language_screen.dart';
+import 'package:myanmar_passenger_app/screens/home/settings/settings_screen.dart';
 
 import '../screens/auth/otp_screen.dart';
 import '../screens/auth/register_screen.dart';
@@ -18,4 +19,5 @@ final Map<String, WidgetBuilder> routes = {
   // home routes
   HomeScreen.routeName: (context) => HomeScreen(),
   SettingsScreen.routeName: (context) => SettingsScreen(),
+  LanguageScreen.routeName: (context) => LanguageScreen(),
 };

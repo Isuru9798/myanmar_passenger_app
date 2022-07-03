@@ -23,7 +23,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  @override
   final _formKey = GlobalKey<FormState>();
   final AuthenticationService authService = AuthenticationService();
 
@@ -36,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //     isLoading = status;
   //   });
   // }
-
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
